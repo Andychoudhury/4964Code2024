@@ -49,29 +49,19 @@ public class TeleopCode4964 extends LinearOpMode {
         waitForStart();
         runtime.reset();
 
-        double speedMultiplier = 1;
+
 
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
 
-            if (gamepad1.a){
-                speedMultiplier = 0.75;
-            }
 
-            if (gamepad1.b){
-                speedMultiplier = 0.5;
-            }
-
-            if (gamepad1.x){
-                speedMultiplier = 1;
-            }
 
             double max;
 
             // POV Mode uses left joystick to go forward & strafe, and right joystick to rotate.
-            double axial   = -speedMultiplier*gamepad1.left_stick_y;  // Note: pushing stick forward gives negative value
-            double lateral =  speedMultiplier*gamepad1.left_stick_x;
-            double yaw     =  speedMultiplier*gamepad1.right_stick_x;
+            double axial   = -gamepad1.left_stick_y;  // Note: pushing stick forward gives negative value
+            double lateral =  gamepad1.left_stick_x;
+            double yaw     =  gamepad1.right_stick_x;
 
             // Combine the joystick requests for each axis-motion to determine each wheel's power.
             // Set up a variable for each drive wheel to save the power level for telemetry.
@@ -87,10 +77,10 @@ public class TeleopCode4964 extends LinearOpMode {
             max = Math.max(max, Math.abs(rightBackPower));
 
             if (max > 1.0) {
-                leftFrontPower  /= (max/speedMultiplier);
-                rightFrontPower /= (max/speedMultiplier);
-                leftBackPower   /= (max/speedMultiplier);
-                rightBackPower  /= (max/speedMultiplier);
+                leftFrontPower  /= (max);
+                rightFrontPower /= (max);
+                leftBackPower   /= (max);
+                rightBackPower  /= (max);
             }
 
             // This is test code:
