@@ -22,10 +22,10 @@ public class TeleopCode4964 extends LinearOpMode {
 
         // Initialize the hardware variables. Note that the strings used here must correspond
         // to the names assigned during the robot configuration step on the DS or RC devices.
-        leftFrontDrive  = hardwareMap.get(DcMotor.class, "left_front_drive");
-        leftBackDrive  = hardwareMap.get(DcMotor.class, "left_back_drive");
-        rightFrontDrive = hardwareMap.get(DcMotor.class, "right_front_drive");
-        rightBackDrive = hardwareMap.get(DcMotor.class, "right_back_drive");
+        leftFrontDrive  = hardwareMap.get(DcMotor.class, "FrontLeft");
+        leftBackDrive  = hardwareMap.get(DcMotor.class, "BackLeft");
+        rightFrontDrive = hardwareMap.get(DcMotor.class, "FrontRight");
+        rightBackDrive = hardwareMap.get(DcMotor.class, "BackRight");
 
         // ########################################################################################
         // !!!            IMPORTANT Drive Information. Test your motor directions.            !!!!!
@@ -49,14 +49,29 @@ public class TeleopCode4964 extends LinearOpMode {
         waitForStart();
         runtime.reset();
 
+        double speedMultiplier = 1;
+
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
+
+            if (gamepad1.a){
+                speedMultiplier = 0.75;
+            }
+
+            if (gamepad1.b){
+                speedMultiplier = 0.5;
+            }
+
+            if (gamepad1.x){
+                speedMultiplier = 1;
+            }
+
             double max;
 
             // POV Mode uses left joystick to go forward & strafe, and right joystick to rotate.
-            double axial   = -gamepad1.left_stick_y;  // Note: pushing stick forward gives negative value
-            double lateral =  gamepad1.left_stick_x;
-            double yaw     =  gamepad1.right_stick_x;
+            double axial   = -speedMultiplier*gamepad1.left_stick_y;  // Note: pushing stick forward gives negative value
+            double lateral =  speedMultiplier*gamepad1.left_stick_x;
+            double yaw     =  speedMultiplier*gamepad1.right_stick_x;
 
             // Combine the joystick requests for each axis-motion to determine each wheel's power.
             // Set up a variable for each drive wheel to save the power level for telemetry.
@@ -72,10 +87,10 @@ public class TeleopCode4964 extends LinearOpMode {
             max = Math.max(max, Math.abs(rightBackPower));
 
             if (max > 1.0) {
-                leftFrontPower  /= max;
-                rightFrontPower /= max;
-                leftBackPower   /= max;
-                rightBackPower  /= max;
+                leftFrontPower  /= (max/speedMultiplier);
+                rightFrontPower /= (max/speedMultiplier);
+                leftBackPower   /= (max/speedMultiplier);
+                rightBackPower  /= (max/speedMultiplier);
             }
 
             // This is test code:
