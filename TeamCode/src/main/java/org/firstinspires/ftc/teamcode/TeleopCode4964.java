@@ -16,6 +16,7 @@ public class TeleopCode4964 extends LinearOpMode {
     private DcMotor leftBackDrive = null;
     private DcMotor rightFrontDrive = null;
     private DcMotor rightBackDrive = null;
+    private DcMotor LiftMotor = null;
 
     @Override
     public void runOpMode() {
@@ -26,6 +27,7 @@ public class TeleopCode4964 extends LinearOpMode {
         leftBackDrive  = hardwareMap.get(DcMotor.class, "BackLeft");
         rightFrontDrive = hardwareMap.get(DcMotor.class, "FrontRight");
         rightBackDrive = hardwareMap.get(DcMotor.class, "BackRight");
+        LiftMotor = hardwareMap.get(DcMotor.class, "LiftMotor");
 
         // ########################################################################################
         // !!!            IMPORTANT Drive Information. Test your motor directions.            !!!!!
@@ -55,7 +57,7 @@ public class TeleopCode4964 extends LinearOpMode {
         double speedMultiplier = 1;
         while (opModeIsActive()) {
 
-
+        /* Drive Train */
 
             double max;
 
@@ -121,6 +123,15 @@ public class TeleopCode4964 extends LinearOpMode {
             telemetry.addData("Front left/Right", "%4.2f, %4.2f", leftFrontPower, rightFrontPower);
             telemetry.addData("Back  left/Right", "%4.2f, %4.2f", leftBackPower, rightBackPower);
             telemetry.update();
+
+            /* Lift */
+
+            double LiftPower = gamepad2.left_stick_y;
+            LiftPower /= 2;
+            LiftMotor.setPower(LiftPower);
+
+
+
         }
     }}
 
