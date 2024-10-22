@@ -16,7 +16,7 @@ public class TeleopCode4964 extends LinearOpMode {
     private DcMotor leftBackDrive = null;
     private DcMotor rightFrontDrive = null;
     private DcMotor rightBackDrive = null;
-    private DcMotor LiftMotor = null;
+//    private DcMotor LiftMotor = null;
 
     @Override
     public void runOpMode() {
@@ -27,7 +27,7 @@ public class TeleopCode4964 extends LinearOpMode {
         leftBackDrive  = hardwareMap.get(DcMotor.class, "BackLeft");
         rightFrontDrive = hardwareMap.get(DcMotor.class, "FrontRight");
         rightBackDrive = hardwareMap.get(DcMotor.class, "BackRight");
-        LiftMotor = hardwareMap.get(DcMotor.class, "LiftMotor");
+//        LiftMotor = hardwareMap.get(DcMotor.class, "LiftMotor");
 
         // ########################################################################################
         // !!!            IMPORTANT Drive Information. Test your motor directions.            !!!!!
@@ -43,6 +43,13 @@ public class TeleopCode4964 extends LinearOpMode {
         leftBackDrive.setDirection(DcMotor.Direction.REVERSE);
         rightFrontDrive.setDirection(DcMotor.Direction.FORWARD);
         rightBackDrive.setDirection(DcMotor.Direction.FORWARD);
+        leftFrontDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        rightFrontDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        leftBackDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        rightBackDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        //initicializing the speed multiplier variable
+        double speedMultiplier = 1;
 
         // Wait for the game to start (driver presses START)
         telemetry.addData("Status", "Initialized");
@@ -54,19 +61,22 @@ public class TeleopCode4964 extends LinearOpMode {
 
 
         // run until the end of the match (driver presses STOP)
-        double speedMultiplier = 1;
+
         while (opModeIsActive()) {
 
         /* Drive Train */
 
             double max;
 
-            //A button sets the speed to 75%, B sets the speed to 50%
+            //A button sets the speed to 75%, B sets the speed to 50%, X resets the speed to normal full power
             if (gamepad1.a){
                 speedMultiplier = 0.75;
             }
             if(gamepad1.b){
                 speedMultiplier = 0.5;
+            }
+            if (gamepad1.x){
+                speedMultiplier = 1;
             }
 
             // POV Mode uses left joystick to go forward & strafe, and right joystick to rotate.
@@ -77,10 +87,14 @@ public class TeleopCode4964 extends LinearOpMode {
 
             // Combine the joystick requests for each axis-motion to determine each wheel's power.
             // Set up a variable for each drive wheel to save the power level for telemetry.
+//            double leftFrontPower  = axial + lateral + yaw;
+//            double rightFrontPower = axial - lateral - yaw;
+//            double leftBackPower   = axial - lateral + yaw;
+//            double rightBackPower  = axial + lateral - yaw;
             double leftFrontPower  = axial + lateral + yaw;
-            double rightFrontPower = axial - lateral - yaw;
+            double rightFrontPower = axial + lateral - yaw;
             double leftBackPower   = axial - lateral + yaw;
-            double rightBackPower  = axial + lateral - yaw;
+            double rightBackPower  = axial - lateral - yaw;
 
             // Normalize the values so no wheel power exceeds 100%
             // This ensures that the robot maintains the desired motion.
@@ -118,6 +132,8 @@ public class TeleopCode4964 extends LinearOpMode {
             leftBackDrive.setPower(leftBackPower);
             rightBackDrive.setPower(rightBackPower);
 
+            //For some reason, the telemetry is wrong when strafing but it shows the right data when going forward, turning, etc.
+
             // Show the elapsed game time and wheel power.
             telemetry.addData("Status", "Run Time: " + runtime.toString());
             telemetry.addData("Front left/Right", "%4.2f, %4.2f", leftFrontPower, rightFrontPower);
@@ -126,10 +142,10 @@ public class TeleopCode4964 extends LinearOpMode {
 
             /* Lift */
 
-            double LiftPower = gamepad2.left_stick_y;
-            LiftPower /= 2;
-            LiftMotor.setPower(LiftPower);
-
+//            double LiftPower = gamepad2.left_stick_y;
+//            LiftPower /= 2;
+//            LiftMotor.setPower(LiftPower);
+//
 
 
         }
