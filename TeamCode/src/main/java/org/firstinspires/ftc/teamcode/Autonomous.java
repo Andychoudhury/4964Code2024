@@ -36,8 +36,6 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 @com.qualcomm.robotcore.eventloop.opmode.Autonomous(name="AutonomousTest")
 public class Autonomous extends LinearOpMode {
 
-    //skibidiskibidiskibdi
-
     DcMotor frontleft = null;
     DcMotor frontright = null;
     DcMotor backleft = null;
