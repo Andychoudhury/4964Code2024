@@ -33,8 +33,10 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
-@com.qualcomm.robotcore.eventloop.opmode.Autonomous(name="Autonomous")
+@com.qualcomm.robotcore.eventloop.opmode.Autonomous(name="AutonomousTest")
 public class Autonomous extends LinearOpMode {
+
+    //skibidiskibidiskibdi
 
     DcMotor frontleft = null;
     DcMotor frontright = null;
