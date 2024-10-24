@@ -48,7 +48,7 @@ public class AutonomousTest2 extends LinearOpMode {
     Double diameter = 4.09449; //wheel diameter
     Double cpi = (cpr * gearRatio) / (Math.PI * diameter); //counts per inch, 28cpr * gear ratio / (2 * pi * diameter (in inches, in the center))
 
-    Double bias = 1.33;//adjust error by dividing intended fwd motion by actual
+    Double bias = 1.0;//adjust error by dividing intended fwd motion by actual
     Double meccyBias = 1.85;//change to adjust only strafing movement error
     Double turnBias = 0.4; //change to adjust turing error
     Boolean exit = false; //keeps auto process from quitting until mpvement is finished
