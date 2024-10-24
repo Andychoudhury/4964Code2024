@@ -29,13 +29,12 @@
 
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 //import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
-@Autonomous(name="AutonomousTest2")
-public class AutonomousTest2 extends LinearOpMode {
+@com.qualcomm.robotcore.eventloop.opmode.Autonomous(name="AutonomousTest2")
+public class Autonomous extends LinearOpMode {
 
     DcMotor frontleft = null;
     DcMotor frontright = null;
@@ -50,7 +49,7 @@ public class AutonomousTest2 extends LinearOpMode {
 
     Double bias = 1.0;//adjust error by dividing intended fwd motion by actual
     Double meccyBias = 1.85;//change to adjust only strafing movement error
-    Double turnBias = 0.4; //change to adjust turing error
+    Double turnBias = 0.3; //change to adjust turing error
     Boolean exit = false; //keeps auto process from quitting until mpvement is finished
 
 
@@ -88,17 +87,17 @@ public class AutonomousTest2 extends LinearOpMode {
 
 
         //input list of movement commands.  Can tune sleep between commands to minimize wait between moves or ensure complete motion.
-        moveToPosition(10, 0.1);
-   /*     sleep(500);
+//        turnWithEncoder(90,0.3);
+//       sleep(500);
         strafeToPosition(10,0.3);
-        sleep(500);
-        moveToPosition(-20,0.3);
-        sleep(500);
-        turnWithEncoder(-90, 0.3);
-        sleep(500);
-        moveToPosition(15,0.3);
-        sleep(500);
-*/
+//        sleep(500);
+//        moveToPosition(-20,0.3);
+//        sleep(500);
+//        turnWithEncoder(-90, 0.3);
+//        sleep(500);
+//        moveToPosition(15,0.3);
+//        sleep(500);
+
     }
 
 
@@ -153,8 +152,8 @@ public class AutonomousTest2 extends LinearOpMode {
         //
         backleft.setTargetPosition(backleft.getCurrentPosition() - move);
         frontleft.setTargetPosition(frontleft.getCurrentPosition() + move);
-        backright.setTargetPosition(backright.getCurrentPosition() + move);
-        frontright.setTargetPosition(frontright.getCurrentPosition() - move);
+        backright.setTargetPosition(backright.getCurrentPosition() - move);
+        frontright.setTargetPosition(frontright.getCurrentPosition() + move);
         //
         frontleft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         frontright.setMode(DcMotor.RunMode.RUN_TO_POSITION);
