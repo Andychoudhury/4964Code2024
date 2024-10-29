@@ -15,7 +15,7 @@ public class TeleopCode extends LinearOpMode {
     private DcMotor leftBackDrive = null;
     private DcMotor rightFrontDrive = null;
     private DcMotor rightBackDrive = null;
-//    private DcMotor LiftMotor = null;
+    private DcMotor LiftMotor = null;
 
     @Override
     public void runOpMode() {
@@ -26,7 +26,7 @@ public class TeleopCode extends LinearOpMode {
         leftBackDrive  = hardwareMap.get(DcMotor.class, "BackLeft");
         rightFrontDrive = hardwareMap.get(DcMotor.class, "FrontRight");
         rightBackDrive = hardwareMap.get(DcMotor.class, "BackRight");
-//        LiftMotor = hardwareMap.get(DcMotor.class, "LiftMotor");
+        LiftMotor = hardwareMap.get(DcMotor.class, "LiftMotor");
 
         // ########################################################################################
         // !!!            IMPORTANT Drive Information. Test your motor directions.            !!!!!
@@ -109,6 +109,8 @@ public class TeleopCode extends LinearOpMode {
                 rightBackPower  /= (max/speedMultiplier);
             }
 
+
+
             // This is test code:
             //
             // Uncomment the following code to test your motor directions.
@@ -126,11 +128,17 @@ public class TeleopCode extends LinearOpMode {
             rightBackPower  = gamepad1.b ? 1.0 : 0.0;  // B gamepad
             */
 
+            /* Lift */
+
+            double LiftPower = gamepad2.left_stick_y/2;
+
+
             // Send calculated power to wheels
             leftFrontDrive.setPower(leftFrontPower);
             rightFrontDrive.setPower(rightFrontPower);
             leftBackDrive.setPower(leftBackPower);
             rightBackDrive.setPower(rightBackPower);
+            LiftMotor.setPower(LiftPower);
 
             //For some reason, the telemetry is wrong when strafing but it shows the right data when going forward, turning, etc.
 
@@ -140,12 +148,8 @@ public class TeleopCode extends LinearOpMode {
             telemetry.addData("Back  left/Right", "%4.2f, %4.2f", leftBackPower, rightBackPower);
             telemetry.update();
 
-            /* Lift */
 
-//            double LiftPower = gamepad2.left_stick_y;
-//            LiftPower /= 2;
-//            LiftMotor.setPower(LiftPower);
-//
+
 
 
         }
