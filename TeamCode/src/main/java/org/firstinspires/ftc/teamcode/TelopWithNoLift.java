@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 @TeleOp(name="Teleop Code", group="Linear OpMode")
 
-public class TestbotTeleop extends LinearOpMode {
+public class TelopWithNoLift extends LinearOpMode {
 
     // Declare OpMode members for each of the 4 motors.
     private ElapsedTime runtime = new ElapsedTime();
