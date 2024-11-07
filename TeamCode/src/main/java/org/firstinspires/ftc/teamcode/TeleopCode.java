@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 @TeleOp(name="Teleop Code", group="Linear OpMode")
@@ -16,6 +17,9 @@ public class TeleopCode extends LinearOpMode {
     private DcMotor rightFrontDrive = null;
     private DcMotor rightBackDrive = null;
     private DcMotor LiftMotor = null;
+    private DcMotor clawLift = null;
+    private DcMotor clawRotate = null;
+    private Servo Claw = null;
 
     @Override
     public void runOpMode() {
@@ -27,6 +31,10 @@ public class TeleopCode extends LinearOpMode {
         rightFrontDrive = hardwareMap.get(DcMotor.class, "FrontRight");
         rightBackDrive = hardwareMap.get(DcMotor.class, "BackRight");
         LiftMotor = hardwareMap.get(DcMotor.class, "LiftMotor");
+        clawLift = hardwareMap.get(DcMotor.class, "ClawLift");
+        clawRotate = hardwareMap.get(DcMotor.class,"ClawRotate");
+        Claw = hardwareMap.get(Servo.class,"Claw");
+
 
         // ########################################################################################
         // !!!            IMPORTANT Drive Information. Test your motor directions.            !!!!!
@@ -48,6 +56,8 @@ public class TeleopCode extends LinearOpMode {
         leftBackDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightBackDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         LiftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        clawLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        clawRotate.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         //initicializing the speed multiplier variable
         double speedMultiplier = 1;
@@ -92,9 +102,16 @@ public class TeleopCode extends LinearOpMode {
 //            double rightFrontPower = axial - lateral - yaw;
 //            double leftBackPower   = axial - lateral + yaw;
 //            double rightBackPower  = axial + lateral - yaw;
-            double leftFrontPower  = axial - lateral + yaw;
+
+
+
+//            double leftFrontPower  = axial - lateral + yaw;
+//            double rightFrontPower = axial - lateral - yaw;
+//            double leftBackPower   = axial + lateral + yaw;
+//            double rightBackPower  = axial + lateral - yaw;
+            double leftFrontPower  = axial + lateral + yaw;
             double rightFrontPower = axial - lateral - yaw;
-            double leftBackPower   = axial + lateral + yaw;
+            double leftBackPower   = axial - lateral + yaw;
             double rightBackPower  = axial + lateral - yaw;
 
             // Normalize the values so no wheel power exceeds 100%
@@ -131,7 +148,22 @@ public class TeleopCode extends LinearOpMode {
 
             /* Lift */
 
-            double LiftPower = gamepad2.left_stick_y/2;
+            double LiftPower = gamepad2.left_stick_y;
+
+            /* Claw lift */
+
+            double clawLiftPower = 0;
+
+            if (gamepad2.dpad_up){
+                clawLiftPower = 1;
+            }
+            if (gamepad2.dpad_down){
+                clawLiftPower = -1;
+            }
+
+            /* Claw Lift Rotate */
+
+            double clawRotatePower = gamepad2.right_stick_y;
 
 
             // Send calculated power to wheels
@@ -140,6 +172,8 @@ public class TeleopCode extends LinearOpMode {
             leftBackDrive.setPower(leftBackPower);
             rightBackDrive.setPower(rightBackPower);
             LiftMotor.setPower(LiftPower);
+            clawLift.setPower(clawLiftPower);
+            clawRotate.setPower(clawRotatePower);
 
             //For some reason, the telemetry is wrong when strafing but it shows the right data when going forward, turning, etc.
 
@@ -147,7 +181,7 @@ public class TeleopCode extends LinearOpMode {
             telemetry.addData("Status", "Run Time: " + runtime.toString());
             telemetry.addData("Front left/Right", "%4.2f, %4.2f", leftFrontPower, rightFrontPower);
             telemetry.addData("Back  left/Right", "%4.2f, %4.2f", leftBackPower, rightBackPower);
-            telemetry.addData("Lift","%4.2f, %4.2f",LiftPower);
+            telemetry.addData("Lift","%4.2f",LiftPower);
             telemetry.update();
 
 
