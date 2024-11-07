@@ -148,7 +148,7 @@ public class TeleopCode extends LinearOpMode {
 
             /* Lift */
 
-            double LiftPower = gamepad2.left_stick_y;
+            double LiftPower = -gamepad2.left_stick_y;
 
             /* Claw lift */
 
