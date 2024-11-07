@@ -89,7 +89,7 @@ public class Autonomous extends LinearOpMode {
         //input list of movement commands.  Can tune sleep between commands to minimize wait between moves or ensure complete motion.
 //        turnWithEncoder(90,0.3);
 //       sleep(500);
-        strafeToPosition(10,0.3);
+        moveToPosition(10,0.5);
 //        sleep(500);
 //        moveToPosition(-20,0.3);
 //        sleep(500);
