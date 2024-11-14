@@ -5,7 +5,6 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
-
 @TeleOp(name="Teleop Code", group="Linear OpMode")
 
 public class TeleopCode extends LinearOpMode {
@@ -26,14 +25,14 @@ public class TeleopCode extends LinearOpMode {
 
         // Initialize the hardware variables. Note that the strings used here must correspond
         // to the names assigned during the robot configuration step on the DS or RC devices.
-        leftFrontDrive  = hardwareMap.get(DcMotor.class, "FrontLeft");
-        leftBackDrive  = hardwareMap.get(DcMotor.class, "BackLeft");
+        leftFrontDrive = hardwareMap.get(DcMotor.class, "FrontLeft");
+        leftBackDrive = hardwareMap.get(DcMotor.class, "BackLeft");
         rightFrontDrive = hardwareMap.get(DcMotor.class, "FrontRight");
         rightBackDrive = hardwareMap.get(DcMotor.class, "BackRight");
         LiftMotor = hardwareMap.get(DcMotor.class, "LiftMotor");
         clawLift = hardwareMap.get(DcMotor.class, "ClawLift");
-        clawRotate = hardwareMap.get(DcMotor.class,"ClawRotate");
-        Claw = hardwareMap.get(Servo.class,"Claw");
+        clawRotate = hardwareMap.get(DcMotor.class, "ClawRotate");
+        Claw = hardwareMap.get(Servo.class, "Claw");
 
 
         // ########################################################################################
@@ -62,6 +61,8 @@ public class TeleopCode extends LinearOpMode {
         //initicializing the speed multiplier variable
         double speedMultiplier = 1;
 
+        Claw.setPosition(.9); //close
+
         // Wait for the game to start (driver presses START)
         telemetry.addData("Status", "Initialized");
         telemetry.update();
@@ -70,31 +71,30 @@ public class TeleopCode extends LinearOpMode {
         runtime.reset();
 
 
-
         // run until the end of the match (driver presses STOP)
 
         while (opModeIsActive()) {
 
-        /* Drive Train */
+            /* Drive Train */
 
             double max;
 
             //A button sets the speed to 75%, B sets the speed to 50%, X resets the speed to normal full power
-            if (gamepad1.a){
+            if (gamepad1.a) {
                 speedMultiplier = 0.75;
             }
-            if(gamepad1.b){
+            if (gamepad1.b) {
                 speedMultiplier = 0.5;
             }
-            if (gamepad1.x){
+            if (gamepad1.x) {
                 speedMultiplier = 1;
             }
 
             // POV Mode uses left joystick to go forward & strafe, and right joystick to rotate.
             //Multiplies the speed multiplier by the joystick value to slow down the robot
-            double axial   = -speedMultiplier*gamepad1.left_stick_y;  // Note: pushing stick forward gives negative value
-            double lateral =  speedMultiplier*gamepad1.left_stick_x;
-            double yaw     =  speedMultiplier*gamepad1.right_stick_x;
+            double axial = -speedMultiplier * gamepad1.left_stick_y;  // Note: pushing stick forward gives negative value
+            double lateral = speedMultiplier * gamepad1.left_stick_x;
+            double yaw = speedMultiplier * gamepad1.right_stick_x;
 
             // Combine the joystick requests for each axis-motion to determine each wheel's power.
             // Set up a variable for each drive wheel to save the power level for telemetry.
@@ -104,15 +104,14 @@ public class TeleopCode extends LinearOpMode {
 //            double rightBackPower  = axial + lateral - yaw;
 
 
-
 //            double leftFrontPower  = axial - lateral + yaw;
 //            double rightFrontPower = axial - lateral - yaw;
 //            double leftBackPower   = axial + lateral + yaw;
 //            double rightBackPower  = axial + lateral - yaw;
-            double leftFrontPower  = axial + lateral + yaw;
+            double leftFrontPower = axial + lateral + yaw;
             double rightFrontPower = axial - lateral - yaw;
-            double leftBackPower   = axial - lateral + yaw;
-            double rightBackPower  = axial + lateral - yaw;
+            double leftBackPower = axial - lateral + yaw;
+            double rightBackPower = axial + lateral - yaw;
 
             // Normalize the values so no wheel power exceeds 100%
             // This ensures that the robot maintains the desired motion.
@@ -121,12 +120,11 @@ public class TeleopCode extends LinearOpMode {
             max = Math.max(max, Math.abs(rightBackPower));
 
             if (max > speedMultiplier) {
-                leftFrontPower  /= (max/speedMultiplier);
-                rightFrontPower /= (max/speedMultiplier);
-                leftBackPower   /= (max/speedMultiplier);
-                rightBackPower  /= (max/speedMultiplier);
+                leftFrontPower /= (max / speedMultiplier);
+                rightFrontPower /= (max / speedMultiplier);
+                leftBackPower /= (max / speedMultiplier);
+                rightBackPower /= (max / speedMultiplier);
             }
-
 
 
             // This is test code:
@@ -148,22 +146,33 @@ public class TeleopCode extends LinearOpMode {
 
             /* Lift */
 
-            double LiftPower = -gamepad2.left_stick_y;
+            double LiftPower = gamepad2.left_stick_y;
 
             /* Claw lift */
 
-            double clawLiftPower = 0;
+            double clawLiftPower;
 
-            if (gamepad2.dpad_up){
+            if (gamepad2.dpad_up) {
                 clawLiftPower = 1;
-            }
-            if (gamepad2.dpad_down){
+            } else if (gamepad2.dpad_down) {
                 clawLiftPower = -1;
+            } else {
+                clawLiftPower = 0;
             }
 
             /* Claw Lift Rotate */
 
             double clawRotatePower = gamepad2.right_stick_y;
+
+            /* Claw */
+
+            if (gamepad2.y) {
+                Claw.setPosition(0.4); //open
+            }
+
+            if (gamepad2.x) {
+                Claw.setPosition(0.9); //close
+            }
 
 
             // Send calculated power to wheels
@@ -181,11 +190,8 @@ public class TeleopCode extends LinearOpMode {
             telemetry.addData("Status", "Run Time: " + runtime.toString());
             telemetry.addData("Front left/Right", "%4.2f, %4.2f", leftFrontPower, rightFrontPower);
             telemetry.addData("Back  left/Right", "%4.2f, %4.2f", leftBackPower, rightBackPower);
-            telemetry.addData("Lift","%4.2f",LiftPower);
+            telemetry.addData("Lift", "%4.2f", LiftPower);
             telemetry.update();
-
-
-
 
 
         }
